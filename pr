@@ -1,0 +1,100 @@
+#include <iostream>
+#include <cmath>
+#include <string>
+ 
+float roots = 0;
+std::string equation = "1";
+
+
+float discr(float a, float b, float c)
+{
+    float discriminant = b*b - 4*a*c;
+    return discriminant;
+}
+    
+float solve_square_equation(float a, float b, float c, float signed_sqrt_discr, float x)
+    {
+    x = (-b + signed_sqrt_discr)/2/a;
+    return x;
+    }
+    
+float solve_linear_equation(float b, float c, float x)
+    {
+    x = -c/b;
+    return x;
+    }
+    
+float how_many_solutions(float a, float b, float c)
+{
+    if (abs(a) < 0.000000001)
+        {
+            if (abs(b) < 0.000000001)
+            {
+                if (abs(c) < 0.000000001)
+                {
+                    std::cout << "infinitely many solutions";
+                }
+                else
+                {
+                    std::cout << "error";
+                }
+            }
+            else
+            {
+                roots = 1;
+                equation = "liner_equation";
+            }
+        }
+        else
+        {
+        float discriminant = discr(a, b, c);
+        if (discriminant > 0)
+            {
+            equation = "square_equation";
+            if (abs(discriminant) > 0.000001)    
+                roots = 2;
+            }
+            else
+                roots = 1;
+        }
+    return roots;  
+}
+
+void print_results(std::string equation, float roots, float x, float x1)
+    {
+    if (roots == 1 || roots == 2)
+        std::cout << "x_1 = " << x << std::endl;
+    if (roots == 2)
+        std::cout << "x_2 = " << x1 << std::endl;
+    }
+
+int main()
+{
+    float a = 0;
+    float b = 0;
+    float c = 0;
+    float x = 0;
+    float x1 = 0;
+    
+    std::cout << "Enter the coefficients a, b and c: ";
+    std::cin >> a >> b >> c;
+    
+     
+    float roots = how_many_solutions(a, b, c);
+     
+    if (equation == "linear_equation")
+        x = solve_linear_equation(b, c, x);
+         
+    if (equation == "square_equation")
+        {
+        float signed_sqrt_discr = sqrt(discr(a, b, c));
+        x = solve_square_equation(a, b, c, signed_sqrt_discr, x);
+        if (roots == 2)
+            {
+            signed_sqrt_discr *= (-1);
+            x1 = solve_square_equation(a, b, c, signed_sqrt_discr, x1);
+            }
+        }
+        
+    print_results(equation, roots, x, x1);
+    }
